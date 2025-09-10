@@ -52,6 +52,7 @@ pipeline {
             }
             steps {
                 script {
+                    echo "Deploying to development server at ${env.DEV_SERVER_IP}"
                     def remote = [:]
                     remote.name = 'dev-server'
                     remote.host = env.DEV_SERVER_IP
