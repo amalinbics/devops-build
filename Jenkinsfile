@@ -55,7 +55,9 @@ pipeline {
                     echo "Deploying to development server at ${env.DEV_SERVER_IP}"
 
                      sshagent(['ssh-key']) {
-                        sh 'ssh ${env.DEV_SERVER_IP} "echo Connected!"'
+                        "echo ${REMOTE_SERVER_USER_NAME}"
+                        "echo ${env.DEV_SERVER_IP}"
+                        sh 'ssh ${REMOTE_SERVER_USER_NAME}@${env.DEV_SERVER_IP} "echo Connected!"'
                      }
 
 
