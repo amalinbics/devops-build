@@ -53,6 +53,12 @@ pipeline {
             steps {
                 script {
                     echo "Deploying to development server at ${env.DEV_SERVER_IP}"
+
+                     sshagent(['ssh-key']) {
+                        sh 'ssh ${env.DEV_SERVER_IP} "echo Connected!"'
+                     }
+
+
                     def remote = [:]
                     remote.name = 'dev-server'
                     remote.host = env.DEV_SERVER_IP
