@@ -43,6 +43,7 @@ resource "aws_instance" "prod-server" {
   }
 }
 
+
 resource "aws_instance" "monitor-server" {
   ami                         = var.ami
   instance_type               = var.instance_type

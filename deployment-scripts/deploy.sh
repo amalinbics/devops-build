@@ -1,8 +1,4 @@
 #!/bin/bash
-IMAGE_NAME="<IMAGE_NAME>"
-IMAGE_TAG="<IMAGE_TAG>"
-CONTAINER_NAME="<CONTAINER_NAME>"
-
 # Stop and remove old container if running
 if [ "$(docker ps -q -f name=$CONTAINER_NAME)" ]; then
     echo "Stopping old container..."

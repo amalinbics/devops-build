@@ -94,7 +94,7 @@ resource "aws_security_group" "jenkins_sg" {
 }
 
 resource "aws_security_group" "dev_server_sg" {
-  name        = "deployment-server-sg"
+  name        = "dev-server-sg"
   description = "Allow SSH"
   vpc_id      = aws_vpc.final_project_vpc.id  
 
