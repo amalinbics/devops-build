@@ -15,18 +15,17 @@ pipeline {
                 script{
                     if (env.BRANCH_NAME == 'dev') {
                         sshagent(['SERVER_KEY']) {
-                             
-                                echo "Docker username: ${DOCKER_CREDENTIALS_USR}"
-                                echo "Docker password: ${DOCKER_CREDENTIALS_PSW}"
-
-
+                            
                                 sh """
                                 #!/bin/bash
                                 # Copy script to remote server
                                 scp -o StrictHostKeyChecking=no -r ./* ${REMOTE_SERVER_USER_NAME}@${DEV_SERVER_IP}:/tmp/devops-build/
 
                                 # Run the script on remote server
-                                ssh -o StrictHostKeyChecking=no ${REMOTE_SERVER_USER_NAME}@${DEV_SERVER_IP} 'chmod +x /tmp/devops-build/build.sh && /tmp/devops-build/build.sh ${DOCKER_IMAGE_DEV} ${DOCKER_TAG} ${$DOCKER_CREDENTIALS_USR} ${$DOCKER_CREDENTIALS_PSW}'
+                                ssh -o StrictHostKeyChecking=no ${REMOTE_SERVER_USER_NAME}@${DEV_SERVER_IP} '
+                                export DOCKER_USER="${DOCKER_CREDENTIALS_USR}" &&
+                                export DOCKER_PASS="${DOCKER_CREDENTIALS_PSW}" && 
+                                chmod +x /tmp/devops-build/build.sh && /tmp/devops-build/build.sh ${DOCKER_IMAGE_DEV} ${DOCKER_TAG}'
                                 """
                             }
                         

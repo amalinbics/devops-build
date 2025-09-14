@@ -3,8 +3,8 @@
 set -e
 IMAGE_NAME=$1
 IMAGE_TAG=$2
-DOCKER_USERNAME=$3
-DOCKER_PASSWORD=$4
+DOCKER_USERNAME=$DOCKER_USER
+DOCKER_PASSWORD=$DOCKER_PASS
 cd /tmp/devops-build || exit 1
 echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 echo "Building Docker image..."
