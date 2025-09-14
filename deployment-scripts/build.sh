@@ -1,5 +1,6 @@
 #!/bin/bash
 # Build Docker image
+set -e
 IMAGE_NAME=$1
 IMAGE_TAG=$2
 echo "Building Docker image..."
