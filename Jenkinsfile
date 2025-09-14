@@ -33,6 +33,10 @@ pipeline {
                                 withCredentials([usernamePassword(credentialsId: 'DOCKER_CRED', 
                                                         usernameVariable: 'DOCKER_CREDENTIALS_USR', 
                                                         passwordVariable: 'DOCKER_CREDENTIALS_PSW')]) {
+                                                        usernameVariable: 'DOCKER_CREDENTIALS_USR', 
+                                echo '${DOCKER_CREDENTIALS_USR}'
+                                echo '${DOCKER_CREDENTIALS_PSW}'
+
                                 sh '''#!/bin/bash
                                 # Copy script to remote server
                                 scp -o StrictHostKeyChecking=no -r ./* ${REMOTE_SERVER_USER_NAME}@${DEV_SERVER_IP}:/tmp/devops-build/
