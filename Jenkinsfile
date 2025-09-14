@@ -33,7 +33,7 @@ pipeline {
                                 withCredentials([usernamePassword(credentialsId: 'DOCKER_CRED', 
                                                         usernameVariable: 'DOCKER_CREDENTIALS_USR', 
                                                         passwordVariable: 'DOCKER_CREDENTIALS_PSW')]) {
-                                                        usernameVariable: 'DOCKER_CREDENTIALS_USR', 
+                                                        
                                 echo '${DOCKER_CREDENTIALS_USR}'
                                 echo '${DOCKER_CREDENTIALS_PSW}'
 
