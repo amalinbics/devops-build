@@ -5,6 +5,7 @@ IMAGE_NAME=$1
 IMAGE_TAG=$2
 DOCKER_USERNAME=$3
 DOCKER_PASSWORD=$4
+cd /tmp/devops-build || exit 1
 echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 echo "Building Docker image..."
 docker build -t $IMAGE_NAME:$IMAGE_TAG .
