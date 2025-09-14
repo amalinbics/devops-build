@@ -17,22 +17,23 @@ pipeline {
                         sshagent(['SERVER_KEY']) {
                              
                                 echo "Docker username: ${DOCKER_CREDENTIALS_USR}"
+                                echo "Docker password: ${DOCKER_CREDENTIALS_PSW}"
 
-                                sh '''#!/bin/bash
+
+                                sh """
+                                #!/bin/bash
                                 # Copy script to remote server
                                 scp -o StrictHostKeyChecking=no -r ./* ${REMOTE_SERVER_USER_NAME}@${DEV_SERVER_IP}:/tmp/devops-build/
 
                                 # Run the script on remote server
-                                ssh -o StrictHostKeyChecking=no ${REMOTE_SERVER_USER_NAME}@${DEV_SERVER_IP} "chmod +x /tmp/devops-build/build.sh && /tmp/devops-build/build.sh ${DOCKER_IMAGE_DEV} ${DOCKER_TAG} ${$DOCKER_CREDENTIALS_USR} ${$DOCKER_CREDENTIALS_PSW}"
-                                '''
+                                ssh -o StrictHostKeyChecking=no ${REMOTE_SERVER_USER_NAME}@${DEV_SERVER_IP} 'chmod +x /tmp/devops-build/build.sh && /tmp/devops-build/build.sh ${DOCKER_IMAGE_DEV} ${DOCKER_TAG} ${$DOCKER_CREDENTIALS_USR} ${$DOCKER_CREDENTIALS_PSW}'
+                                """
                             }
                         
                     }
                     else if (env.BRANCH_NAME == 'main') {
                         sshagent(['SERVER_KEY']) {
-                                withCredentials([usernamePassword(credentialsId: 'DOCKER_CRED', 
-                                                        usernameVariable: 'DOCKER_CREDENTIALS_USR', 
-                                                        passwordVariable: 'DOCKER_CREDENTIALS_PSW')]) {
+                              
                                                         
                                 echo '${DOCKER_CREDENTIALS_USR}'
                                 echo '${DOCKER_CREDENTIALS_PSW}'
@@ -44,7 +45,7 @@ pipeline {
                                 # Run the script on remote server
                                 ssh -o StrictHostKeyChecking=no ${REMOTE_SERVER_USER_NAME}@${DEV_SERVER_IP} "chmod +x /tmp/devops-build/build.sh && /tmp/devops-build/build.sh ${DOCKER_IMAGE_PROD} ${DOCKER_TAG} ${$DOCKER_CREDENTIALS_USR} ${$DOCKER_CREDENTIALS_PSW}"
                                 '''
-                            }
+                            
                         }
                     }
                 }
