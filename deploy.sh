@@ -2,10 +2,10 @@
 # Stop and remove old container if running
 set -e
 cd /tmp/devops-build || exit 1
-IMAGE_NAME=$1
 CONTAINER_NAME=$1
-DOCKER_USERNAME=$2
-DOCKER_PASSWORD=$3
+IMAGE_NAME=$2
+DOCKER_USERNAME=$3
+DOCKER_PASSWORD=$4
 
 
 echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
