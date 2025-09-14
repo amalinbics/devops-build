@@ -15,7 +15,7 @@ pipeline {
                 script{
                     if (env.BRANCH_NAME == 'dev') {
                         sshagent(['SERVER_KEY']) {
-                            
+
                                 sh """
                                 #!/bin/bash
                                 # Copy script to remote server
@@ -57,10 +57,13 @@ pipeline {
             steps {
                 echo "Deploying to development server at ${DEV_SERVER_IP}"
                 sshagent(['SERVER_KEY']) {
-                    sh '''#!/bin/bash
+                    sh """#!/bin/bash
                     # Run the script on remote server
-                    ssh -o StrictHostKeyChecking=no ${REMOTE_SERVER_USER_NAME}@${DEV_SERVER_IP} "chmod +x /tmp/devops-build/deploy.sh && /tmp/devops-build/deploy.sh final-project ${DOCKER_IMAGE_PROD} ${$DOCKER_CREDENTIALS_USR} ${$DOCKER_CREDENTIALS_PSW}"
-                    '''
+                    ssh -o StrictHostKeyChecking=no ${REMOTE_SERVER_USER_NAME}@${DEV_SERVER_IP} ' 
+                    export DOCKER_USER="${DOCKER_CREDENTIALS_USR}" &&
+                    export DOCKER_PASS="${DOCKER_CREDENTIALS_PSW}" && 
+                    chmod +x /tmp/devops-build/deploy.sh && /tmp/devops-build/deploy.sh final-project e-commerce-app ${DOCKER_IMAGE_DEV}'
+                    """
                 }
                 echo 'Development build deployed successfully!'  
             }

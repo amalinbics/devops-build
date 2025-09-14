@@ -4,8 +4,8 @@ set -e
 cd /tmp/devops-build || exit 1
 CONTAINER_NAME=$1
 IMAGE_NAME=$2
-DOCKER_USERNAME=$3
-DOCKER_PASSWORD=$4
+DOCKER_USERNAME=$DOCKER_USER
+DOCKER_PASSWORD=$DOCKER_PASS
 
 
 echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
