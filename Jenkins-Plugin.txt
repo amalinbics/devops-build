@@ -1,0 +1,4 @@
+- Git plugin
+- GitHub Branch Source plugin (or Bitbucket equivalent)
+- Multibranch Scan Webhook Trigger Plugin
+
