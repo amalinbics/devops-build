@@ -8,6 +8,7 @@ pipeline {
         SSH_CREDENTIALS = credentials('SERVER_KEY')
         REMOTE_SERVER_USER_NAME = credentials('REMOTE_SERVER_USERNAME')
         DEV_SERVER_IP = credentials('DEV_SERVER_IP')
+        PROD_SERVER_IP = credentials('PROD_SERVER_IP')
     }
     stages{
         stage('Build'){
@@ -33,18 +34,17 @@ pipeline {
                     else if (env.BRANCH_NAME == 'main') {
                         sshagent(['SERVER_KEY']) {
                               
-                                                        
-                                echo '${DOCKER_CREDENTIALS_USR}'
-                                echo '${DOCKER_CREDENTIALS_PSW}'
-
-                                sh '''#!/bin/bash
+                              sh """
+                                #!/bin/bash
                                 # Copy script to remote server
-                                scp -o StrictHostKeyChecking=no -r ./* ${REMOTE_SERVER_USER_NAME}@${DEV_SERVER_IP}:/tmp/devops-build/
+                                scp -o StrictHostKeyChecking=no -r ./* ${REMOTE_SERVER_USER_NAME}@${PROD_SERVER_IP}:/tmp/devops-build/
 
                                 # Run the script on remote server
-                                ssh -o StrictHostKeyChecking=no ${REMOTE_SERVER_USER_NAME}@${DEV_SERVER_IP} "chmod +x /tmp/devops-build/build.sh && /tmp/devops-build/build.sh ${DOCKER_IMAGE_PROD} ${DOCKER_TAG} ${$DOCKER_CREDENTIALS_USR} ${$DOCKER_CREDENTIALS_PSW}"
-                                '''
-                            
+                                ssh -o StrictHostKeyChecking=no ${REMOTE_SERVER_USER_NAME}@${PROD_SERVER_IP} '
+                                export DOCKER_USER="${DOCKER_CREDENTIALS_USR}" &&
+                                export DOCKER_PASS="${DOCKER_CREDENTIALS_PSW}" && 
+                                chmod +x /tmp/devops-build/build.sh && /tmp/devops-build/build.sh ${DOCKER_IMAGE_DEV} ${DOCKER_TAG}'
+                                """
                         }
                     }
                 }
@@ -57,6 +57,7 @@ pipeline {
             steps {
                 echo "Deploying to development server at ${DEV_SERVER_IP}"
                 sshagent(['SERVER_KEY']) {
+                    
                     sh """#!/bin/bash
                     # Run the script on remote server
                     ssh -o StrictHostKeyChecking=no ${REMOTE_SERVER_USER_NAME}@${DEV_SERVER_IP} ' 
@@ -75,10 +76,13 @@ pipeline {
             steps {
                 echo "Deploying to production server at ${DEV_SERVER_IP}"
                 sshagent(['SERVER_KEY']) {
-                    sh '''#!/bin/bash
+                    sh """#!/bin/bash
                     # Run the script on remote server
-                    ssh -o StrictHostKeyChecking=no ${REMOTE_SERVER_USER_NAME}@${DEV_SERVER_IP} "chmod +x /tmp/devops-build/deploy.sh && /tmp/devops-build/deploy.sh final-project ${DOCKER_IMAGE_PROD} ${$DOCKER_CREDENTIALS_USR} ${$DOCKER_CREDENTIALS_PSW}"
-                    '''
+                    ssh -o StrictHostKeyChecking=no ${REMOTE_SERVER_USER_NAME}@${PROD_SERVER_IP} ' 
+                    export DOCKER_USER="${DOCKER_CREDENTIALS_USR}" &&
+                    export DOCKER_PASS="${DOCKER_CREDENTIALS_PSW}" && 
+                    chmod +x /tmp/devops-build/deploy.sh && /tmp/devops-build/deploy.sh e-commerce-app ${DOCKER_IMAGE_PROD}'
+                    """
                 }
                 echo 'Production build deployed successfully!'  
             }
