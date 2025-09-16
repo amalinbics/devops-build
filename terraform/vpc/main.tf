@@ -99,12 +99,23 @@ resource "aws_security_group" "dev_server_sg" {
   vpc_id      = aws_vpc.final_project_vpc.id  
 
   ingress {
+    description = "http access"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
     description = "SSH access"
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
     cidr_blocks = [format("%s/32", var.my_ip)]
   }
+
+
+
 
   egress {
     description = "Allow all outbound traffic"
@@ -127,6 +138,14 @@ resource "aws_security_group" "prod_server_sg" {
     protocol    = "tcp"
     //cidr_blocks = [var.my_ip]  # Open to all IPs (use your IP for security)
     cidr_blocks = [format("%s/32", var.my_ip)]
+  }
+
+   ingress {
+    description = "http access"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
