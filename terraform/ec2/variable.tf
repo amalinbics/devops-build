@@ -57,4 +57,7 @@ variable "user_data_path_docker" {
   default     = "./ec2/docker-setup.sh"
 }
 
-
+variable "user_data_path_prometheus" {
+  type        = string
+  default     = "./ec2/monitor-setup.sh"
+}

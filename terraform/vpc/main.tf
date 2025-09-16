@@ -5,7 +5,7 @@ resource "aws_vpc" "final_project_vpc" {
   enable_dns_hostnames = true
 
   tags = {
-    Name = "trend-app-vpc"
+    Name = "final-project-app-vpc"
   }
 }
 
@@ -26,7 +26,7 @@ resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.final_project_vpc.id
 
   tags = {
-    Name = "trend-app-vpc-igw"
+    Name = "final-project-app-vpc-igw"
   }
 }
 
@@ -103,8 +103,7 @@ resource "aws_security_group" "dev_server_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    #cidr_blocks = [var.my_ip]  # Open to all IPs (use your IP for security)
-    security_groups = [aws_security_group.jenkins_sg.id]  # Allow only from Jenkins SG
+    cidr_blocks = [format("%s/32", var.my_ip)]
   }
 
   egress {
@@ -114,7 +113,6 @@ resource "aws_security_group" "dev_server_sg" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
-
 }
 
 resource "aws_security_group" "prod_server_sg" {
@@ -127,8 +125,8 @@ resource "aws_security_group" "prod_server_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    #cidr_blocks = [var.my_ip]  # Open to all IPs (use your IP for security)
-     security_groups = [aws_security_group.jenkins_sg.id]
+    //cidr_blocks = [var.my_ip]  # Open to all IPs (use your IP for security)
+    cidr_blocks = [format("%s/32", var.my_ip)]
   }
 
   egress {
@@ -151,7 +149,7 @@ resource "aws_security_group" "monitor_server_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["0.0.0.0/0"]  # Open to all IPs (use your IP for security)
   }
 
   ingress {

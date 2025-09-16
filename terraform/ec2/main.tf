@@ -54,6 +54,7 @@ resource "aws_instance" "monitor-server" {
   iam_instance_profile        = var.iam_instance_profile
   associate_public_ip_address = true
   key_name                    = aws_key_pair.server_key.key_name
+  user_data                   = file(var.user_data_path_prometheus)
   tags = {
     Name = "monitor-Server"
   }
