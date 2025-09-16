@@ -5,7 +5,7 @@ resource "aws_vpc" "final_project_vpc" {
   enable_dns_hostnames = true
 
   tags = {
-    Name = "trend-app-vpc"
+    Name = "final-project-app-vpc"
   }
 }
 
@@ -26,7 +26,7 @@ resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.final_project_vpc.id
 
   tags = {
-    Name = "trend-app-vpc-igw"
+    Name = "final-project-app-vpc-igw"
   }
 }
 
@@ -99,12 +99,23 @@ resource "aws_security_group" "dev_server_sg" {
   vpc_id      = aws_vpc.final_project_vpc.id  
 
   ingress {
+    description = "http access"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
     description = "SSH access"
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = [var.my_ip]  # Open to all IPs (use your IP for security)
+    cidr_blocks = [format("%s/32", var.my_ip)]
   }
+
+
+
 
   egress {
     description = "Allow all outbound traffic"
@@ -113,7 +124,6 @@ resource "aws_security_group" "dev_server_sg" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
-
 }
 
 resource "aws_security_group" "prod_server_sg" {
@@ -126,7 +136,16 @@ resource "aws_security_group" "prod_server_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = [var.my_ip]  # Open to all IPs (use your IP for security)
+    //cidr_blocks = [var.my_ip]  # Open to all IPs (use your IP for security)
+    cidr_blocks = [format("%s/32", var.my_ip)]
+  }
+
+   ingress {
+    description = "http access"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
@@ -149,7 +168,7 @@ resource "aws_security_group" "monitor_server_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = [var.my_ip]  # Open to all IPs (use your IP for security)
+    cidr_blocks = ["0.0.0.0/0"]  # Open to all IPs (use your IP for security)
   }
 
   ingress {
