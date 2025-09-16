@@ -8,3 +8,7 @@ sudo docker run \
   --detach=true \
   --name=cadvisor \
   gcr.io/cadvisor/cadvisor:latest
+
+
+count(container_last_seen{name="e-commerce-app", job="dev-cadvisor"} > time() - 60)
+sudo journalctl -u grafana-server -f

@@ -63,7 +63,7 @@ pipeline {
                     ssh -o StrictHostKeyChecking=no ${REMOTE_SERVER_USER_NAME}@${DEV_SERVER_IP} ' 
                     export DOCKER_USER="${DOCKER_CREDENTIALS_USR}" &&
                     export DOCKER_PASS="${DOCKER_CREDENTIALS_PSW}" && 
-                    chmod +x /tmp/devops-build/deploy.sh && /tmp/devops-build/deploy.sh e-commerce-app ${DOCKER_IMAGE_DEV}'
+                    chmod +x /tmp/devops-build/deploy.sh && /tmp/devops-build/deploy.sh e-commerce-app-dev ${DOCKER_IMAGE_DEV}'
                     """
                 }
                 echo 'Development build deployed successfully!'  
@@ -81,7 +81,7 @@ pipeline {
                     ssh -o StrictHostKeyChecking=no ${REMOTE_SERVER_USER_NAME}@${PROD_SERVER_IP} ' 
                     export DOCKER_USER="${DOCKER_CREDENTIALS_USR}" &&
                     export DOCKER_PASS="${DOCKER_CREDENTIALS_PSW}" && 
-                    chmod +x /tmp/devops-build/deploy.sh && /tmp/devops-build/deploy.sh e-commerce-app ${DOCKER_IMAGE_PROD}'
+                    chmod +x /tmp/devops-build/deploy.sh && /tmp/devops-build/deploy.sh e-commerce-app-prod ${DOCKER_IMAGE_PROD}'
                     """
                 }
                 echo 'Production build deployed successfully!'  
