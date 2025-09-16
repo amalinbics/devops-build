@@ -103,7 +103,8 @@ resource "aws_security_group" "dev_server_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = [var.my_ip]  # Open to all IPs (use your IP for security)
+    #cidr_blocks = [var.my_ip]  # Open to all IPs (use your IP for security)
+    security_groups = [aws_security_group.jenkins_sg.id]  # Allow only from Jenkins SG
   }
 
   egress {
@@ -126,7 +127,8 @@ resource "aws_security_group" "prod_server_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = [var.my_ip]  # Open to all IPs (use your IP for security)
+    #cidr_blocks = [var.my_ip]  # Open to all IPs (use your IP for security)
+     security_groups = [aws_security_group.jenkins_sg.id]
   }
 
   egress {
@@ -149,7 +151,7 @@ resource "aws_security_group" "monitor_server_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = [var.my_ip]  # Open to all IPs (use your IP for security)
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   ingress {

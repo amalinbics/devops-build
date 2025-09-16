@@ -51,3 +51,10 @@ variable "user_data_path" {
   type        = string
   default     = "./ec2/userdata.sh"
 }
+
+variable "user_data_path_docker" {
+  type        = string
+  default     = "./ec2/docker-setup.sh"
+}
+
+

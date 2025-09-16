@@ -5,7 +5,7 @@ provider "aws" {
 
 module "vpc" {
   source = "./vpc"
-  my_ip  = var.my_ip
+  #my_ip  = var.my_ip
 }
 
 module "iam" {
